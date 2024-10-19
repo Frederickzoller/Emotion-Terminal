@@ -145,3 +145,26 @@ select:focus, input:focus, button:focus {
   background-color: #ff00ff;
   box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
 }
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.notification.success {
+  background-color: #4CAF50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.notification.info {
+  background-color: #2196F3;
+}
