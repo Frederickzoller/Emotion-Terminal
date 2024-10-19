@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <h1 class="app-title">Emotion Terminal</h1>
+        
+        <div class="step" id="step1">
+            <h2>Step 1: Choose Tweet Type</h2>
+            <select id="tweetType">
+                <option value="new">New Tweet</option>
+                <option value="reply">Reply to Tweet</option>
+            </select>
+        </div>
+
+        <div id="replyTweetDisplay" class="step" style="display: none;">
+            <h2>Replying to Tweet:</h2>
+            <p id="replyTweetText"></p>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Step 2: Select Topics</h2>
+            <select id="topics" multiple>
+                <option value="technology">Technology</option>
+                <option value="politics">Politics</option>
+                <option value="sports">Sports</option>
+                <option value="entertainment">Entertainment</option>
+            </select>
+            <input type="text" id="customTopic" placeholder="Add custom topic">
+            <button id="addTopic">Add Topic</button>
+            <button id="removeTopic">Remove Topic</button>
+            <h3>Selected Topics:</h3>
+            <ul id="selectedTopics"></ul>
+        </div>
+
+        <div class="step" id="step3">
+            <h2>Step 3: Choose Emotion</h2>
+            <select id="emotion">
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="angry">Angry</option>
+                <option value="excited">Excited</option>
+            </select>
+        </div>
+
+        <button id="generateTweets" class="neon-button">Generate Tweets</button>
+
+        <div id="generatedTweets" class="step"></div>
+
+        <div id="selectedTweet" class="step">
+            <h2>Selected Tweet:</h2>
+            <p id="selectedTweetText"></p>
+            <button id="refineTweet" class="neon-button">Refine Tweet</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.2.2/intro.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
