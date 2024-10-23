@@ -27,9 +27,7 @@ function initApp() {
 
   // Event listeners
   document.getElementById('tweetType').addEventListener('change', handleTweetTypeChange);
-  document.getElementById('topics').addEventListener('change', handleTopicChange);
   document.getElementById('addTopic').addEventListener('click', handleCustomTopicAdd);
-  document.getElementById('removeTopic').addEventListener('click', handleTopicRemove); // New event listener
   document.getElementById('emotion').addEventListener('change', handleEmotionChange);
   document.getElementById('generateTweets').addEventListener('click', generateTweets);
   document.getElementById('refineTweet').addEventListener('click', refineTweet);
@@ -77,50 +75,6 @@ function initApp() {
     }
   }
 
-  function handleTopicChange(event) {
-    state.topics = Array.from(event.target.selectedOptions, option => option.value);
-    updateTopicsList();
-  }
-
-  function handleCustomTopicAdd() {
-    const customTopic = document.getElementById('customTopic').value.trim();
-    if (customTopic && !state.topics.includes(customTopic)) {
-      state.topics.push(customTopic);
-      const option = document.createElement('option');
-      option.value = customTopic;
-      option.text = customTopic;
-      option.selected = true;
-      document.getElementById('topics').add(option);
-      document.getElementById('customTopic').value = '';
-      updateTopicsList();
-    }
-  }
-
-  function handleTopicRemove() {
-    const topicsSelect = document.getElementById('topics');
-    const selectedOptions = Array.from(topicsSelect.selectedOptions);
-    
-    selectedOptions.forEach(option => {
-      const index = state.topics.indexOf(option.value);
-      if (index > -1) {
-        state.topics.splice(index, 1);
-        topicsSelect.remove(option.index);
-      }
-    });
-    
-    updateTopicsList();
-  }
-
-  function updateTopicsList() {
-    const topicsList = document.getElementById('selectedTopics');
-    topicsList.innerHTML = '';
-    state.topics.forEach(topic => {
-      const li = document.createElement('li');
-      li.textContent = topic;
-      topicsList.appendChild(li);
-    });
-  }
-
   function handleEmotionChange(event) {
     state.emotion = event.target.value;
   }
@@ -140,7 +94,7 @@ function initApp() {
       // Collect user input
       const userInput = {
         tweetType: state.tweetType,
-        topics: state.topics.join(', '),
+        topic: document.getElementById('topicInput').value,
         emotion: state.emotion,
         replyToTweet: state.replyToTweet
       };
@@ -148,7 +102,7 @@ function initApp() {
       // Construct the prompt based on user input
       let prompt;
       if (userInput.tweetType === 'new') {
-        prompt = `Generate 4 ${userInput.emotion} tweets about ${userInput.topics}. Return the result as a JSON array of tweet objects, each with a 'content' field. Use this format:
+        prompt = `Generate 4 ${userInput.emotion} tweets about ${userInput.topic}. Return the result as a JSON array of tweet objects, each with a 'content' field. Use this format:
         [
           {
             "content": "Tweet content here"
