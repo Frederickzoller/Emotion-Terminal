@@ -87,6 +87,9 @@ function initApp() {
   };
 
   async function generateTweets() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.style.display = 'block';
+    
     let fullResponse = '';
     try {
       const userInput = {
@@ -308,41 +311,28 @@ function initApp() {
         // Parse the cleaned JSON
         const parsedResponse = JSON.parse(jsonString);
 
-        // Additional validation
-        if (!parsedResponse.analysis || !Array.isArray(parsedResponse.tweets)) {
-          throw new Error('Invalid response structure');
-        }
-
-        // Update state and continue
-        state.analysis = parsedResponse.analysis;
+        // Remove analysis handling
         state.generatedTweets = parsedResponse.tweets.map(tweet => 
           typeof tweet === 'object' && tweet.content ? tweet.content : "No content available"
         );
 
         // Display results
-        displayAnalysis();
         displayGeneratedTweets();
         showNotification('Tweets generated successfully!', 'success');
       } catch (parseError) {
         console.error('JSON parsing error:', parseError);
         console.log('Problematic JSON:', jsonString);
         throw new Error('Failed to parse response JSON');
+      } finally {
+        loadingSpinner.style.display = 'none';
       }
     } catch (error) {
       console.error('bruh moment generating tweets:', error);
       console.log('Failed response:', fullResponse);
       showNotification('shit broke while making tweets... try again?', 'error');
+    } finally {
+      loadingSpinner.style.display = 'none';
     }
-  }
-
-  function displayAnalysis() {
-    const analysisContainer = document.getElementById('tweetAnalysis');
-    const topicElement = document.getElementById('detectedTopic');
-    const emotionElement = document.getElementById('detectedEmotion');
-
-    topicElement.textContent = `Detected Topic: ${state.analysis.detectedTopic}`;
-    emotionElement.textContent = `Emotional Tone: ${state.analysis.detectedEmotion}`;
-    analysisContainer.style.display = 'block';
   }
 
   function displayGeneratedTweets() {
