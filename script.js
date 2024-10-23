@@ -27,7 +27,6 @@ function initApp() {
 
   // Event listeners
   document.getElementById('tweetType').addEventListener('change', handleTweetTypeChange);
-  document.getElementById('addTopic').addEventListener('click', handleCustomTopicAdd);
   document.getElementById('emotion').addEventListener('change', handleEmotionChange);
   document.getElementById('generateTweets').addEventListener('click', generateTweets);
   document.getElementById('refineTweet').addEventListener('click', refineTweet);
