@@ -28,17 +28,13 @@
             <input type="text" id="topicInput" placeholder="Enter topic">
         </div>
 
-        <div class="step" id="step3">
-            <h2>Step 3: Choose Emotion</h2>
-            <select id="emotion">
-                <option value="happy">Happy</option>
-                <option value="sad">Sad</option>
-                <option value="angry">Angry</option>
-                <option value="excited">Excited</option>
-            </select>
-        </div>
-
         <button id="generateTweets" class="neon-button">Generate Tweets</button>
+
+        <div id="tweetAnalysis" class="step" style="display: none;">
+            <h2>Tweet Analysis:</h2>
+            <p id="detectedTopic"></p>
+            <p id="detectedEmotion"></p>
+        </div>
 
         <div id="generatedTweets" class="step"></div>
 

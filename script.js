@@ -13,10 +13,13 @@ function initApp() {
   const state = {
     tweetType: 'new',
     topics: [],
-    emotion: '',
     generatedTweets: [],
     selectedTweet: '',
-    replyToTweet: '', // New state for storing the tweet to reply to
+    replyToTweet: '',
+    analysis: {
+      topic: '',
+      emotion: ''
+    }
   };
 
   // Initialize animations
@@ -27,7 +30,6 @@ function initApp() {
 
   // Event listeners
   document.getElementById('tweetType').addEventListener('change', handleTweetTypeChange);
-  document.getElementById('emotion').addEventListener('change', handleEmotionChange);
   document.getElementById('generateTweets').addEventListener('click', generateTweets);
   document.getElementById('refineTweet').addEventListener('click', refineTweet);
 
@@ -74,10 +76,6 @@ function initApp() {
     }
   }
 
-  function handleEmotionChange(event) {
-    state.emotion = event.target.value;
-  }
-
   const hf = new HfInference('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'); // Replace with your actual Hugging Face token
 
   // Initialize toastr
@@ -90,43 +88,45 @@ function initApp() {
 
   async function generateTweets() {
     try {
-      // Collect user input
       const userInput = {
         tweetType: state.tweetType,
         topic: document.getElementById('topicInput').value,
-        emotion: state.emotion,
         replyToTweet: state.replyToTweet
       };
 
-      // Construct the prompt based on user input
       let prompt;
       if (userInput.tweetType === 'new') {
-        prompt = `Generate 4 ${userInput.emotion} tweets about ${userInput.topic}. Return the result as a JSON array of tweet objects, each with a 'content' field. Use this format:
-        [
-          {
-            "content": "Tweet content here"
+        prompt = `Generate 4 tweets about ${userInput.topic}. Also analyze the emotional tone and main topic of the tweets. Return the result as a JSON object with this format:
+        {
+          "analysis": {
+            "detectedTopic": "main topic detected",
+            "detectedEmotion": "primary emotion detected"
           },
-          {
-            "content": "Another tweet content here"
-          }
-        ]`;
+          "tweets": [
+            {
+              "content": "Tweet content here"
+            }
+          ]
+        }`;
       } else {
-        prompt = `Generate 4 ${userInput.emotion} replies to the tweet: "${userInput.replyToTweet}". Return the result as a JSON array of tweet objects, each with a 'content' field. Use this format:
-        [
-          {
-            "content": "Reply tweet content here"
+        prompt = `Generate 4 replies to the tweet: "${userInput.replyToTweet}". Also analyze the emotional tone and main topic of the replies. Return the result as a JSON object with this format:
+        {
+          "analysis": {
+            "detectedTopic": "main topic detected",
+            "detectedEmotion": "primary emotion detected"
           },
-          {
-            "content": "Another reply tweet content here"
-          }
-        ]`;
+          "tweets": [
+            {
+              "content": "Reply tweet content here"
+            }
+          ]
+        }`;
       }
 
-      // Make the API call using chatCompletionStream
       const response = await hf.chatCompletionStream({
         model: "meta-llama/Llama-3.2-1B-Instruct",
         messages: [
-          { role: "system", content: "You are a helpful assistant that generates tweets based on given topics and emotions. Always respond with valid JSON." },
+          { role: "system", content: "You are a helpful assistant that generates tweets and analyzes their emotional tone and topics. Always respond with valid JSON." },
           { role: "user", content: prompt }
         ],
         temperature: 0.0,
@@ -138,40 +138,32 @@ function initApp() {
         fullResponse += chunk.choices[0]?.delta?.content || "";
       }
 
-      console.log("Full response:", fullResponse); // For debugging
-
-      // Extract JSON from the response
       const jsonMatch = fullResponse.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
       const jsonString = jsonMatch ? jsonMatch[1] : fullResponse;
-
-      // Parse the JSON response
       const parsedResponse = JSON.parse(jsonString);
 
-      console.log("Parsed response:", parsedResponse); // For debugging
+      // Update state with analysis and tweets
+      state.analysis = parsedResponse.analysis;
+      state.generatedTweets = parsedResponse.tweets.map(tweet => tweet.content || "No content available");
 
-      // Extract tweets from the parsed response
-      state.generatedTweets = parsedResponse.map(tweet => tweet.content || "No content available");
-
-      console.log("Generated tweets:", state.generatedTweets); // For debugging
-
-      // Display the generated tweets
+      // Display analysis and tweets
+      displayAnalysis();
       displayGeneratedTweets();
-
-      // Show success message
       showNotification('Tweets generated successfully!', 'success');
     } catch (error) {
       console.error('Error generating tweets:', error);
-      // Show error message
       showNotification('Error generating tweets. Please try again.', 'error');
     }
   }
 
-  // Stub function for sending data to Groq API
-  async function sendToGroqAPI(userInput) {
-    // TODO: Implement Groq API call
-    console.log('Sending to Groq API:', userInput);
-    // This is where we'll implement the actual API call in the next iteration
-    throw new Error('Groq API not implemented yet');
+  function displayAnalysis() {
+    const analysisContainer = document.getElementById('tweetAnalysis');
+    const topicElement = document.getElementById('detectedTopic');
+    const emotionElement = document.getElementById('detectedEmotion');
+
+    topicElement.textContent = `Detected Topic: ${state.analysis.detectedTopic}`;
+    emotionElement.textContent = `Emotional Tone: ${state.analysis.detectedEmotion}`;
+    analysisContainer.style.display = 'block';
   }
 
   function displayGeneratedTweets() {
