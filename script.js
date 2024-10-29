@@ -360,7 +360,7 @@ function initApp() {
       const selectedSystemPrompt = selectRandomEmotion();
 
       const response = await hf.chatCompletionStream({
-        model: "Qwen/Qwen2.5-72B-Instruct",
+        model: "meta-llama/Llama-3.2-1B-Instruct",
         messages: [
           { 
             role: "system", 
