@@ -23,14 +23,14 @@ const bot2 = new TelegramBot(BOT_TOKENS.bot2, { polling: true });
 const CONFIG = {
     bot1: {
         postingInterval: 2 * 60 * 1000, // 2 minutes
-        targetChannel: '-4551469772',
+        targetChannel: '-1002382766589',
         minPostLength: 40,
         maxPostLength: 80,
         name: 'Trump'  // Add personality name
     },
     bot2: {
         postingInterval: 2 * 60 * 1000, // 2 minutes
-        targetChannel: '-4551469772',
+        targetChannel: '-1002382766589',
         minPostLength: 40,
         maxPostLength: 80,
         name: 'Dumbperson'     // Add personality name
