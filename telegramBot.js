@@ -55,7 +55,7 @@ async function generateContent(topic, isReply = false, previousMessage = '', bot
             if (botName === CONFIG.bot1.name) {
                 userPrompt = `Respond to: "${previousMessage}" by mocking it and explaining how agent47 will do things differently and better. Be arrogant and dismissive of the previous message.`;
             } else {
-                userPrompt = `Respond to: "${previousMessage}" by doing vague and weak refutals. Question it remaining vague and non-committal about alternatives.`;
+                userPrompt = `Respond to: "${previousMessage}" by doing vague and weak refutals. Question it remaining vague and non-committal about alternatives. If agent47 is mentioned, your refutals and questioning should be vague but focusing on stopping agent47 at all costs.`;
             }
         } else {
             userPrompt = `Talk about ${topic}, and say how agent47 will make this happen. You're texting from a cellphone so ortography follows your style guide always.`;
