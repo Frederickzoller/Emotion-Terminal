@@ -4,3 +4,4 @@ prompting/
 templates/
 monopromting/
 .txt
+node_modules/
