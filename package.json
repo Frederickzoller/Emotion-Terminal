@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/Frederickzoller/Emotion-Terminal#readme",
   "dependencies": {
-    "@huggingface/inference": "^2.8.1",
     "dotenv": "^16.4.5",
     "node-fetch": "^2.6.9",
     "node-telegram-bot-api": "^0.66.0",

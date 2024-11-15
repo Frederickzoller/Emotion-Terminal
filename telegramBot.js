@@ -1,7 +1,8 @@
 // Import the required libraries
 const TelegramBot = require('node-telegram-bot-api');
-const { HfInference } = require('@huggingface/inference');
+const OpenAI = require('openai');
 const fetch = require('node-fetch');
+const fs = require('fs');
 
 // Make fetch available globally
 global.fetch = fetch;
@@ -9,8 +10,11 @@ global.fetch = fetch;
 // Bot token
 const BOT_TOKEN = '7882372069:AAH_zphFOKq081hKD2sp6wNI-w-EPY8eKWU';
 
-// Hugging Face token
-const hf = new HfInference('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');
+// Initialize OpenAI client
+const openai = new OpenAI({
+    apiKey: 'glhf_4c6e244a95664a44791cfc532efa96e6',
+    baseURL: 'https://glhf.chat/api/openai/v1',
+});
 
 // Create bot instance
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
@@ -25,9 +29,58 @@ const CONFIG = {
 // Import prompts
 const { SYSTEM_PROMPTS } = require('./prompts');
 
+// Load length formats
+const lengthFormats = JSON.parse(fs.readFileSync('./length_formats.json', 'utf8'));
+
+// Create a Map to store conversation history
+const userConversations = new Map();
+
+// Maximum number of messages to remember per user
+const MAX_MEMORY = 4;
+
+// Function to add message to user's conversation history
+function addToConversationHistory(userId, message, isBot) {
+    if (!userConversations.has(userId)) {
+        userConversations.set(userId, []);
+    }
+
+    const history = userConversations.get(userId);
+    history.push({
+        content: message,
+        isBot: isBot,
+        timestamp: Date.now()
+    });
+
+    // Keep only the last MAX_MEMORY messages
+    while (history.length > MAX_MEMORY) {
+        history.shift();
+    }
+
+    userConversations.set(userId, history);
+}
+
+// Function to get conversation history as context
+function getConversationContext(userId) {
+    const history = userConversations.get(userId) || [];
+    return history.map(msg => 
+        `${msg.isBot ? 'Assistant' : 'User'}: ${msg.content}`
+    ).join('\n');
+}
+
+// Function to get random format
+function getRandomFormat() {
+    const formats = lengthFormats.formats;
+    const randomIndex = Math.floor(Math.random() * formats.length);
+    return formats[randomIndex].format;
+}
+
 // Function to generate content
-async function generateContent(userMessage) {
+async function generateContent(userMessage, userId, username) {
     try {
+        const randomFormat = getRandomFormat();
+        const conversationContext = getConversationContext(userId);
+        const userIdentifier = username ? `@${username}` : `User#${userId}`;
+        
         const messages = [
             {
                 role: 'system',
@@ -35,22 +88,18 @@ async function generateContent(userMessage) {
             },
             {
                 role: 'user',
-                content: `Someone said: "${userMessage}". Respond naturally in your Trump style without using @ mentions, being arrogant and dismissive while explaining how agent47 will handle this situation better. Make it personal and direct.`
+                content: `Previous conversation:\n${conversationContext}\n\nNew message from ${userIdentifier}: "${userMessage}"\n\nFormat the response as: ${randomFormat}. Remember to respond like a text message using text-speak and replacing 'r' with 'fw' and 'l' with 'w'. And do not use emojis. Keep the conversation context in mind when responding.`
             }
         ];
 
-        const response = await hf.chatCompletion({
-            model: "Qwen/Qwen2.5-72B-Instruct",
+        const completion = await openai.chat.completions.create({
+            model: "hf:google/gemma-2-9b-it",
             messages: messages,
             temperature: 0.7,
-            max_new_tokens: CONFIG.maxPostLength,
-            do_sample: true
+            max_tokens: CONFIG.maxPostLength,
         });
 
-        let content = response.generated_text;
-        if (response.choices && response.choices.length > 0) {
-            content = response.choices[0].message.content;
-        }
+        let content = completion.choices[0].message.content;
 
         // Remove any @ mentions from the start of the response
         content = content.replace(/^@\w+\s+/, '');
@@ -66,6 +115,10 @@ async function generateContent(userMessage) {
             }
         }
 
+        // Add the exchange to conversation history
+        addToConversationHistory(userId, userMessage, false);
+        addToConversationHistory(userId, content, true);
+
         return content;
     } catch (error) {
         console.error('Error generating content:', error);
@@ -79,7 +132,11 @@ bot.on('message', async (msg) => {
         try {
             console.log('Bot was mentioned in message:', msg.text);
             
-            const response = await generateContent(msg.text);
+            const response = await generateContent(
+                msg.text, 
+                msg.from.id,
+                msg.from.username
+            );
 
             await bot.sendMessage(msg.chat.id, response, {
                 reply_to_message_id: msg.message_id
