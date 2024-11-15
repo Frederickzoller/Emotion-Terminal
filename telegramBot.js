@@ -84,7 +84,7 @@ async function generateContent(userMessage, userId, username) {
         const messages = [
             {
                 role: 'system',
-                content: SYSTEM_PROMPTS.style1 + "\nIMPORTANT: Never start responses with @ mentions. Write naturally as if speaking directly to the person."
+                content: SYSTEM_PROMPTS.style1 + "\n."
             },
             {
                 role: 'user',
