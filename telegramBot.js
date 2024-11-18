@@ -36,7 +36,7 @@ const lengthFormats = JSON.parse(fs.readFileSync('./length_formats.json', 'utf8'
 const userConversations = new Map();
 
 // Maximum number of messages to remember per user
-const MAX_MEMORY = 4;
+const MAX_MEMORY = 2;
 
 // Function to add message to user's conversation history
 function addToConversationHistory(userId, message, isBot) {
@@ -88,7 +88,7 @@ async function generateContent(userMessage, userId, username) {
             },
             {
                 role: 'user',
-                content: `Previous conversation:\n${conversationContext}\n\nNew message from ${userIdentifier}: "${userMessage}"\n\nFormat the response as: ${randomFormat}. Remember to respond like a text message using text-speak and replacing 'r' with 'fw' and 'l' with 'w'. And do not use emojis. Keep the conversation context in mind when responding.`
+                content: `Previous conversation:\n${conversationContext}\n\nNew message from ${userIdentifier}: "${userMessage}"\n\nLet this emotion shape your response: ${randomFormat}. Remember to respond like a text message using text-speak and replacing 'r' with 'fw' and 'l' with 'w'. And do not use emojis. Keep the conversation context in mind when responding.`
             }
         ];
 

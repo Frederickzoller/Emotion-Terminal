@@ -1,220 +1,160 @@
 {
     "formats": [
         {
-            "format": "one word",
-            "description": "Single word response"
+            "format": "excited bouncy response",
+            "description": "Enthusiastic short reply with extra energy"
         },
         {
-            "format": "one kaomoji",
-            "description": "Single kaomoji response"
+            "format": "sleepy mumble",
+            "description": "Drowsy, soft response"
         },
         {
-            "format": "three words",
-            "description": "Three distinct words"
+            "format": "curious tilt",
+            "description": "Inquisitive, head-tilting response"
         },
         {
-            "format": "three textual emoticons",
-            "description": "Three text-based emoticons"
+            "format": "gentle ribbit",
+            "description": "Soft, friendly acknowledgment"
         },
         {
-            "format": "one phrase",
-            "description": "Single coherent phrase"
+            "format": "confused blink",
+            "description": "Puzzled, slightly lost response"
         },
         {
-            "format": "two phrases",
-            "description": "Two distinct phrases"
+            "format": "happy hop",
+            "description": "Joyful, bouncy reply"
         },
         {
-            "format": "three phrases",
-            "description": "Three distinct phrases"
+            "format": "thoughtful pause",
+            "description": "Contemplative, measured response"
         },
         {
-            "format": "one short sentence",
-            "description": "Single concise sentence"
+            "format": "silly giggle",
+            "description": "Playful, amused reply"
         },
         {
-            "format": "two phrases, newline, one phrase",
-            "description": "Two phrases followed by one more, separated by newlines"
+            "format": "surprised gasp",
+            "description": "Startled, wide-eyed response"
         },
         {
-            "format": "one word, newline, another word",
-            "description": "Two words separated by a newline"
+            "format": "cozy whisper",
+            "description": "Comfortable, intimate reply"
         },
         {
-            "format": "three short phrases",
-            "description": "Three brief phrases"
+            "format": "mischievous croak",
+            "description": "Playfully sneaky response"
         },
         {
-            "format": "two words",
-            "description": "Two distinct words"
+            "format": "worried fidget",
+            "description": "Anxious, concerned reply"
         },
         {
-            "format": "one phrase, newline, one word",
-            "description": "Phrase followed by a word with a newline"
+            "format": "determined nod",
+            "description": "Confident, focused response"
         },
         {
-            "format": "five words",
-            "description": "Five distinct words"
+            "format": "shy peep",
+            "description": "Timid, quiet reply"
         },
         {
-            "format": "one short paragraph",
-            "description": "Brief and concise paragraph"
+            "format": "grumpy mumble",
+            "description": "Slightly annoyed response"
         },
         {
-            "format": "one phrase, one textual emoticon",
-            "description": "Phrase followed by a textual emoticon"
+            "format": "eager bounce",
+            "description": "Enthusiastic, quick reply"
         },
         {
-            "format": "two phrases, newline, one kaomoji",
-            "description": "Two phrases followed by a kaomoji, separated by newlines"
+            "format": "dreamy sigh",
+            "description": "Wistful, distant response"
         },
         {
-            "format": "one line of dialogue",
-            "description": "Single line of dialogue"
+            "format": "proud puff",
+            "description": "Self-satisfied, happy reply"
         },
         {
-            "format": "one phrase, newline, an incomplete phrase",
-            "description": "Complete phrase followed by an incomplete one, separated by a newline"
+            "format": "nervous shuffle",
+            "description": "Uncertain, hesitant response"
         },
         {
-            "format": "one short question",
-            "description": "Brief and concise question"
+            "format": "friendly wave",
+            "description": "Welcoming, warm reply"
         },
         {
-            "format": "two short questions",
-            "description": "Two brief questions in a row"
+            "format": "puzzled tilt",
+            "description": "Confused but interested response"
         },
         {
-            "format": "one short exclamation",
-            "description": "Single concise exclamatory statement"
+            "format": "content hum",
+            "description": "Satisfied, peaceful reply"
         },
         {
-            "format": "a short rhetorical question",
-            "description": "One brief rhetorical question"
+            "format": "excited squeak",
+            "description": "Very happy, surprised response"
         },
         {
-            "format": "two rhetorical questions, newline, one short exclamation",
-            "description": "Two brief rhetorical questions followed by a concise exclamation, separated by newlines"
+            "format": "gentle boop",
+            "description": "Playful, affectionate reply"
         },
         {
-            "format": "three clauses in one phrase",
-            "description": "Phrase containing three clauses"
+            "format": "tired yawn",
+            "description": "Sleepy but attentive response"
         },
         {
-            "format": "one short fragment",
-            "description": "Very brief sentence fragment"
+            "format": "hopeful peek",
+            "description": "Optimistic, anticipating reply"
         },
         {
-            "format": "a short phrase ending with a question mark",
-            "description": "Brief phrase that ends with a question mark"
+            "format": "silly splash",
+            "description": "Playful, energetic response"
         },
         {
-            "format": "two short thoughts connected by ellipsis",
-            "description": "Two brief thoughts linked by an ellipsis"
+            "format": "quiet wonder",
+            "description": "Amazed, soft reply"
         },
         {
-            "format": "one action descriptor",
-            "description": "Action described concisely"
+            "format": "happy wiggle",
+            "description": "Joyful, moving response"
         },
         {
-            "format": "one thought bubble-style phrase",
-            "description": "Phrase structured like a thought bubble"
+            "format": "thoughtful hmm",
+            "description": "Considering, processing reply"
         },
         {
-            "format": "a combination of two clauses joined by but what if...",
-            "description": "What-if style phrase with two clauses"
+            "format": "startled jump",
+            "description": "Surprised, reactive response"
         },
         {
-            "format": "one phrase structured as a list",
-            "description": "List-style phrase with short elements"
+            "format": "loving pat",
+            "description": "Affectionate, caring reply"
         },
         {
-            "format": "three short, disconnected thoughts",
-            "description": "Three disjointed thoughts presented separately"
+            "format": "curious poke",
+            "description": "Investigative, interested response"
         },
         {
-            "format": "a short phrase with a play on words",
-            "description": "Phrase with a clever wordplay"
+            "format": "sleepy nuzzle",
+            "description": "Comfortable, drowsy reply"
         },
         {
-            "format": "one short phrase, interrupted by parentheses",
-            "description": "Brief phrase with a parenthetical interjection"
+            "format": "bouncy dance",
+            "description": "Very excited, moving response"
         },
         {
-            "format": "two descriptive phrases, newline, one short reaction",
-            "description": "Two phrases describing something, followed by a brief reaction"
+            "format": "gentle comfort",
+            "description": "Soothing, supportive reply"
         },
         {
-            "format": "one overly long phrase",
-            "description": "Extended phrase without breaks"
+            "format": "playful splash",
+            "description": "Fun, water-related response"
         },
         {
-            "format": "one very short question",
-            "description": "Brief and concise question"
+            "format": "worried peek",
+            "description": "Concerned but caring reply"
         },
         {
-            "format": "one disconnected phrase",
-            "description": "Fragmented thought that stands alone"
-        },
-        {
-            "format": "two linked fragments",
-            "description": "Two separate but related fragments"
-        },
-        {
-            "format": "one incomplete thought",
-            "description": "Unfinished thought ending abruptly"
-        },
-        {
-            "format": "one short phrase with ellipsis",
-            "description": "Single brief phrase trailing off"
-        },
-        {
-            "format": "one ultra-short response",
-            "description": "Extremely brief reply, under 15 characters"
-        },
-        {
-            "format": "one tiny phrase",
-            "description": "Phrase around 10-20 characters"
-        },
-        {
-            "format": "one minimal reaction",
-            "description": "Very short response, e.g., 'oh' or 'hmm'"
-        },
-        {
-            "format": "one micro-thought",
-            "description": "Quick idea, under 20 characters"
-        },
-        {
-            "format": "two ultra-short words",
-            "description": "Two words, under 20 characters total"
-        },
-        {
-            "format": "one clipped phrase",
-            "description": "Compact, under 20 characters"
-        },
-        {
-            "format": "one short sound",
-            "description": "Single onomatopoeic sound, e.g., 'hm' or 'ah'"
-        },
-        {
-            "format": "one terse reply",
-            "description": "Brief response, under 10 characters"
-        },
-        {
-            "format": "one quick thought",
-            "description": "Fast idea, under 15 characters"
-        },
-        {
-            "format": "one brisk reaction",
-            "description": "Short response like 'wow' or 'eh'"
-        },
-        {
-            "format": "one swift phrase",
-            "description": "Compact phrase, under 15 characters"
-        },
-        {
-            "format": "one tight fragment",
-            "description": "Very brief fragment, under 10 characters"
+            "format": "happy snuggle",
+            "description": "Cozy, content response"
         }
     ]
 }
