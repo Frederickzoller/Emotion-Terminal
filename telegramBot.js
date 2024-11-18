@@ -8,7 +8,7 @@ const fs = require('fs');
 global.fetch = fetch;
 
 // Bot token
-const BOT_TOKEN = '7882372069:AAH_zphFOKq081hKD2sp6wNI-w-EPY8eKWU';
+const BOT_TOKEN = '8114720082:AAGpl4L_IXXwxaLHOPUtWYUflsQP0rjIu6c';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -21,7 +21,7 @@ const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
 // Configuration
 const CONFIG = {
-    username: 'sentinenttrumpbot',
+    username: 'fwogaibot',
     minPostLength: 40,
     maxPostLength: 200  // Increased for better responses
 };
@@ -165,4 +165,4 @@ bot.onText(/\/chatid/, (msg) => {
 });
 
 // Startup message
-console.log('Trump bot started! Ready to respond to @sentinenttrumpbot mentions...');
+console.log('Fwogai bot started! Ready to respond to @fwogaibot mentions...');
