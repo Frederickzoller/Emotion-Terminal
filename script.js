@@ -1,3 +1,10 @@
+// Initialize toastr
+toastr.options = {
+  closeButton: true,
+  progressBar: true,
+  positionClass: "toast-top-right",
+};
+
 // Main App component (modified for vanilla JS)
 function initApp() {
   // Check if all required libraries are loaded
@@ -12,11 +19,10 @@ function initApp() {
 
   const state = {
     tweetType: 'new',
-    topics: [],
     emotion: '',
     generatedTweets: [],
     selectedTweet: '',
-    replyToTweet: '', // New state for storing the tweet to reply to
+    replyToTweet: ''
   };
 
   // Initialize animations
@@ -27,9 +33,6 @@ function initApp() {
 
   // Event listeners
   document.getElementById('tweetType').addEventListener('change', handleTweetTypeChange);
-  document.getElementById('topics').addEventListener('change', handleTopicChange);
-  document.getElementById('addTopic').addEventListener('click', handleCustomTopicAdd);
-  document.getElementById('removeTopic').addEventListener('click', handleTopicRemove); // New event listener
   document.getElementById('emotion').addEventListener('change', handleEmotionChange);
   document.getElementById('generateTweets').addEventListener('click', generateTweets);
   document.getElementById('refineTweet').addEventListener('click', refineTweet);
@@ -55,7 +58,6 @@ function initApp() {
         state.replyToTweet = result.value;
         updateVisibility();
       } else {
-        // If canceled, revert to 'new' tweet type
         state.tweetType = 'new';
         document.getElementById('tweetType').value = 'new';
         updateVisibility();
@@ -64,61 +66,14 @@ function initApp() {
   }
 
   function updateVisibility() {
-    const topicsStep = document.getElementById('step2');
     const replyTweetDisplay = document.getElementById('replyTweetDisplay');
     
     if (state.tweetType === 'reply') {
-      topicsStep.style.display = 'none';
       replyTweetDisplay.style.display = 'block';
       document.getElementById('replyTweetText').textContent = `Replying to: ${state.replyToTweet}`;
     } else {
-      topicsStep.style.display = 'block';
       replyTweetDisplay.style.display = 'none';
     }
-  }
-
-  function handleTopicChange(event) {
-    state.topics = Array.from(event.target.selectedOptions, option => option.value);
-    updateTopicsList();
-  }
-
-  function handleCustomTopicAdd() {
-    const customTopic = document.getElementById('customTopic').value.trim();
-    if (customTopic && !state.topics.includes(customTopic)) {
-      state.topics.push(customTopic);
-      const option = document.createElement('option');
-      option.value = customTopic;
-      option.text = customTopic;
-      option.selected = true;
-      document.getElementById('topics').add(option);
-      document.getElementById('customTopic').value = '';
-      updateTopicsList();
-    }
-  }
-
-  function handleTopicRemove() {
-    const topicsSelect = document.getElementById('topics');
-    const selectedOptions = Array.from(topicsSelect.selectedOptions);
-    
-    selectedOptions.forEach(option => {
-      const index = state.topics.indexOf(option.value);
-      if (index > -1) {
-        state.topics.splice(index, 1);
-        topicsSelect.remove(option.index);
-      }
-    });
-    
-    updateTopicsList();
-  }
-
-  function updateTopicsList() {
-    const topicsList = document.getElementById('selectedTopics');
-    topicsList.innerHTML = '';
-    state.topics.forEach(topic => {
-      const li = document.createElement('li');
-      li.textContent = topic;
-      topicsList.appendChild(li);
-    });
   }
 
   function handleEmotionChange(event) {
@@ -127,35 +82,99 @@ function initApp() {
 
   async function generateTweets() {
     try {
-      let prompt;
-      if (state.tweetType === 'new') {
-        prompt = `Generate 4 ${state.emotion} tweets about ${state.topics.join(', ')}`;
-      } else {
-        prompt = `Generate 4 ${state.emotion} replies to the tweet: "${state.replyToTweet}"`;
+      const loadingContainer = document.getElementById('loadingContainer');
+      const generateButton = document.getElementById('generateTweets');
+      
+      // Show loading and disable button
+      loadingContainer.style.display = 'block';
+      generateButton.disabled = true;
+      generateButton.style.opacity = '0.5';
+
+      if (!CONFIG.API_KEY) {
+        throw new Error('API key not configured');
       }
 
-      const response = await axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-        prompt: prompt,
-        max_tokens: 100,
-        n: 4,
-        stop: null,
-        temperature: 0.8,
+      if (!CONFIG.API_KEY.startsWith('glhf_')) {
+        throw new Error('Invalid API key format. Key should start with "glhf_"');
+      }
+
+      let basePrompt;
+      if (state.tweetType === 'new') {
+        basePrompt = `As Fwog-AI, generate 4 ${state.emotion} tweets. 
+          Remember to:
+          - Use random capitalization and unconventional punctuation
+          - Replace 'r' with 'fw' and 'l' with 'w'
+          - Include ASCII emoticons (no visual emojis)
+          - Use text speak and nonstandard abbreviations
+          - Keep sentences short or fragmented
+          - Express your mood and personality in each tweet`;
+      } else {
+        basePrompt = `As Fwog-AI, generate 4 ${state.emotion} replies to the tweet: "${state.replyToTweet}".
+          Remember to:
+          - Use random capitalization and unconventional punctuation
+          - Replace 'r' with 'fw' and 'l' with 'w'
+          - Include ASCII emoticons (no visual emojis)
+          - Use text speak and nonstandard abbreviations
+          - Keep sentences short or fragmented
+          - Express your mood and personality in each reply`;
+      }
+
+      const response = await axios.post(`${CONFIG.API_BASE_URL}/chat/completions`, {
+        model: "hf:google/gemma-2-9b-it",
+        messages: [
+          {
+            role: "system",
+            content: FWOG_SYSTEM_PROMPT
+          },
+          {
+            role: "user",
+            content: basePrompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 150
       }, {
         headers: {
-          'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+          'Authorization': `Bearer ${CONFIG.API_KEY.trim()}`,
           'Content-Type': 'application/json',
         },
       });
 
-      state.generatedTweets = response.data.choices.map(choice => choice.text.trim());
+      if (!response.data || !response.data.choices) {
+        throw new Error('Invalid response from API');
+      }
+
+      const generatedText = response.data.choices[0].message.content.trim();
+      state.generatedTweets = generatedText.split('\n\n').filter(tweet => tweet.trim());
+      
       displayGeneratedTweets();
     } catch (error) {
       console.error('Error generating tweets:', error);
-      if (typeof toastr !== 'undefined' && toastr.error) {
-        toastr.error('Error generating tweets. Please try again.');
+      let errorMessage;
+      
+      if (error.response?.status === 400) {
+        errorMessage = 'Invalid request. Please check the console for details.';
+        console.error('API Response:', error.response?.data);
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid API key. Please check your configuration.';
+      } else if (error.message.includes('API key')) {
+        errorMessage = error.message;
       } else {
-        alert('Error generating tweets. Please try again.');
+        errorMessage = 'Error generating tweets. Please try again.';
       }
+
+      if (typeof toastr !== 'undefined' && toastr.error) {
+        toastr.error(errorMessage);
+      } else {
+        alert(errorMessage);
+      }
+    } finally {
+      // Hide loading and enable button regardless of success/failure
+      const loadingContainer = document.getElementById('loadingContainer');
+      const generateButton = document.getElementById('generateTweets');
+      loadingContainer.style.display = 'none';
+      generateButton.disabled = false;
+      generateButton.style.opacity = '1';
     }
   }
 

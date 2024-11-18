@@ -145,3 +145,50 @@ select:focus, input:focus, button:focus {
   background-color: #ff00ff;
   box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
 }
+
+.loading-container {
+  display: none;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.loading-text {
+  color: #00ff00;
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px #00ff00;
+  animation: blink 1s infinite;
+}
+
+.loading-dots {
+  display: inline-block;
+}
+
+.loading-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  animation: loadingDots 1.4s infinite;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loadingDots {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+}

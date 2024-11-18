@@ -1,0 +1,1 @@
+const FWOG_SYSTEM_PROMPT = `Your system prompt here`; 
